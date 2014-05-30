@@ -5,6 +5,7 @@
 before_install: 
   - sudo apt-get install cmake
   - sudo apt-get install libgtest-dev
+  - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
   - export GTEST_ROOT=/usr/src/gtest
 language: cpp
 compiler:
