@@ -6,6 +6,8 @@ find_package(Threads REQUIRED)
 
 function(add_executable_and_tests EXECUTABLE)
 	add_executable(${EXECUTABLE} ${ARGN})
+	target_link_libraries(${EXECUTABLE} ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
 	FOREACH(SRC ${ARGN})
 		SET(TEST_REGEX "^[ \t]*(TEST|TEST_F)\\(([^,]*),[ \t]*([^\\)]*)\\).*$")
 		FILE(STRINGS ${SRC} GTEST_LINES REGEX ${TEST_REGEX})
@@ -16,6 +18,7 @@ function(add_executable_and_tests EXECUTABLE)
 			ADD_TEST(${GTEST_GROUP_NAME}.${GTEST_TEST_NAME} ${EXECUTABLE} --gtest_filter=${GTEST_GROUP_NAME}.${GTEST_TEST_NAME})
 		ENDFOREACH()
 	ENDFOREACH()
+
 endfunction(add_executable_and_tests)
 
 
@@ -23,7 +26,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable_and_tests(algorithm src/algorithm.cpp)
 
-target_link_libraries(main ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 enable_testing()
 
