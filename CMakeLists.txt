@@ -21,7 +21,7 @@ endfunction(add_executable_and_tests)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_executable_and_tests(main main.cpp)
+add_executable_and_tests(algorithm src/algorithm.cpp)
 
 target_link_libraries(main ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
