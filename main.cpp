@@ -4,6 +4,6 @@ TEST(foo, boo) {
   ASSERT_TRUE(true);
 }
 
-TEST(foo, boo) {
+TEST(foo, boo2) {
   ASSERT_TRUE(false);
 }
