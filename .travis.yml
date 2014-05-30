@@ -2,11 +2,20 @@
 # http://about.travis-ci.org/docs/user/build-configuration/
 # This file can be validated on:
 # http://lint.travis-ci.org/
-before_install: sudo apt-get install cmake
+before_install: 
+  - sudo apt-get install cmake
+  - sudo apt-get install libgtest-dev
+  - export GTEST_ROOT=/usr/src/gtest
 language: cpp
 compiler:
   - clang
-script: cmake . && cmake --build .
+script:
+  - mkdir _builds
+  - cd _builds
+  - cmake ..
+  - make
+  - ctest
+
 #script: cmake -DJSONCPP_LIB_BUILD_SHARED=$SHARED_LIBRARY -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_VERBOSE_MAKEFILE=$VERBOSE_MAKE . && make
 #env:
 #  global:

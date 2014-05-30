@@ -1,5 +1,9 @@
+#include <gtest/gtest.h>
 
-int main()
-{
-	return 0;
+TEST(foo, boo) {
+  ASSERT_TRUE(true);
+}
+
+TEST(foo, boo) {
+  ASSERT_TRUE(false);
 }
