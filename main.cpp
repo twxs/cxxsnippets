@@ -1,9 +1,19 @@
 #include <gtest/gtest.h>
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <vector>
 
-TEST(foo, boo) {
-  ASSERT_TRUE(true);
+using namespace std;
+
+template<class Range, class Value>
+bool contains(const Range &range, const Value &value) {
+	typedef decltype(*cbegin(range)) value_type; 
+	return any_of(cbegin(range), cend(range), [](const value_type &i) { return value == i;} );
 }
 
-TEST(foo, boo2) {
-  ASSERT_TRUE(false);
+TEST(any_of, contains) {
+  string str("hello");
+  ASSERT_TRUE(contains(str, 'o'));
 }
+
