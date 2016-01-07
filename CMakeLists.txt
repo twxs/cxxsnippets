@@ -1,25 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 
-# http://www.guyrutenberg.com/2014/01/05/enabling-c11-c0x-in-cmake/
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+find_package(GTest )
+# hack for system where gtest-main is not available 
+if(NOT GTEST_LIBRARIES)
+    _gtest_append_debugs(GTEST_LIBRARIES GTEST_LIBRARY)
+    message(${GTEST_LIBRARIES})
 endif()
 
-find_package(GTest REQUIRED)
 find_package(Threads REQUIRED)
-
 
 function(add_executable_and_tests EXECUTABLE)
 	add_executable(${EXECUTABLE} ${ARGN})
-	target_link_libraries(${EXECUTABLE} ${GTEST_BOTH_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-
+	target_link_libraries(${EXECUTABLE} ${GTEST_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+	target_include_directories(${EXECUTABLE} PUBLIC ${GTEST_INCLUDE_DIR})
+    target_compile_features(${EXECUTABLE} PRIVATE cxx_auto_type cxx_range_for)
 	FOREACH(SRC ${ARGN})
 		SET(TEST_REGEX "^[ \t]*(TEST|TEST_F)\\(([^,]*),[ \t]*([^\\)]*)\\).*$")
 		FILE(STRINGS ${SRC} GTEST_LINES REGEX ${TEST_REGEX})
@@ -36,7 +30,7 @@ endfunction(add_executable_and_tests)
 
 include_directories(${GTEST_INCLUDE_DIRS})
 
-add_executable_and_tests(algorithm src/algorithm.cpp)
+add_executable_and_tests(algorithm main.cpp src/algorithm.cpp)
 
 
 enable_testing()
